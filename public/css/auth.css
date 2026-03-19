@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --ink-0:   #f2f0ec;
+  --ink-1:   #b0aca4;
+  --ink-2:   #68655f;
+  --ink-3:   #3c3a37;
+
+  --ground:  #100f0e;
+  --lift-1:  #181715;
+  --lift-2:  #201f1d;
+  --lift-3:  #2a2927;
+  --lift-4:  #343230;
+
+  --edge:    rgba(255,255,255,0.07);
+  --edge-2:  rgba(255,255,255,0.13);
+
+  --hi:      #a78bfa;
+  --hi-bg:   rgba(167,139,250,0.10);
+  --hi-edge: rgba(167,139,250,0.30);
+
+  --go:      #4ade80;
+  --go-bg:   rgba(74,222,128,0.10);
+  --stop:    #f87171;
+  --stop-bg: rgba(248,113,113,0.12);
+  --stop-edge: rgba(248,113,113,0.32);
+
+  --font: 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --r3: 8px; --r4: 12px; --r5: 16px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: var(--font); background: var(--ground); color: var(--ink-0);
+  font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased;
+}
+
+/* Two-column layout */
+.page { display: flex; min-height: 100vh; }
+
+/* Left panel */
+.brand-panel {
+  flex: 1; background: var(--lift-1);
+  border-right: 1px solid var(--edge);
+  display: flex; align-items: center; justify-content: center;
+  padding: 60px 52px;
+}
+
+.brand-content { max-width: 380px; }
+
+.brand-logo {
+  display: flex; align-items: center; gap: 11px; margin-bottom: 48px;
+}
+
+.logo-hex {
+  width: 40px; height: 40px;
+  background: var(--hi-bg); border: 1px solid var(--hi-edge);
+  border-radius: var(--r3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: var(--hi); flex-shrink: 0;
+}
+
+.logo-name { font-size: 18px; font-weight: 700; letter-spacing: 2.5px; color: var(--ink-0); }
+
+.brand-headline {
+  font-size: 38px; font-weight: 700; line-height: 1.18;
+  color: var(--ink-0); margin-bottom: 16px; letter-spacing: -0.5px;
+}
+.brand-headline em { font-style: italic; color: var(--hi); }
+
+.brand-sub { font-size: 15px; color: var(--ink-2); line-height: 1.75; margin-bottom: 40px; }
+
+.feature-list {
+  display: flex; flex-direction: column; gap: 0;
+  border: 1px solid var(--edge); border-radius: var(--r4); overflow: hidden;
+}
+
+.feature-item {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 13px; color: var(--ink-2);
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--edge);
+  transition: background 0.12s;
+}
+.feature-item:last-child { border-bottom: none; }
+.feature-item:hover { background: var(--lift-2); }
+
+.feature-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--hi); flex-shrink: 0;
+}
+
+/* Right panel */
+.auth-panel {
+  width: 460px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 36px; background: var(--ground);
+}
+
+.auth-card { width: 100%; max-width: 370px; }
+
+/* Tabs */
+.auth-tabs {
+  display: flex; background: var(--lift-1);
+  border: 1px solid var(--edge); border-radius: var(--r4);
+  padding: 4px; margin-bottom: 24px; gap: 3px;
+}
+
+.tab {
+  flex: 1; padding: 9px; border: none; background: transparent;
+  color: var(--ink-2); font-family: var(--font);
+  font-size: 14px; font-weight: 500;
+  border-radius: calc(var(--r4) - 3px); cursor: pointer; transition: all 0.12s;
+}
+.tab:hover { color: var(--ink-0); }
+.tab.active { background: var(--hi); color: #fff; font-weight: 600; }
+
+/* Banner */
+.banner {
+  padding: 11px 13px; border-radius: var(--r3);
+  font-size: 13px; font-weight: 500; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px; border: 1px solid;
+}
+.banner.error  { background: var(--stop-bg); border-color: var(--stop-edge); color: #fca5a5; }
+.banner.success { background: var(--go-bg); border-color: rgba(74,222,128,0.25); color: #86efac; }
+
+/* Fields */
+.field-group { margin-bottom: 13px; }
+
+.field-label {
+  display: block; font-size: 11px; font-weight: 500; color: var(--ink-2);
+  text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px;
+}
+.field-hint { font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--ink-3); }
+
+.field-input {
+  width: 100%; background: var(--lift-1); border: 1px solid var(--edge);
+  border-radius: var(--r3); padding: 11px 13px;
+  font-family: var(--font); font-size: 14px; color: var(--ink-0);
+  outline: none; transition: border-color 0.15s;
+}
+.field-input::placeholder { color: var(--ink-3); }
+.field-input:focus { border-color: var(--hi-edge); box-shadow: 0 0 0 3px var(--hi-bg); }
+
+/* Primary button */
+.btn-primary {
+  width: 100%; padding: 12px; background: var(--hi); border: none;
+  border-radius: var(--r3); color: #fff; font-family: var(--font);
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  transition: opacity 0.12s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 4px;
+}
+.btn-primary:hover { opacity: 0.87; }
+.btn-primary:active { opacity: 0.72; }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-spinner { display: inline-block; animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Divider */
+.divider {
+  position: relative; text-align: center; margin: 20px 0;
+}
+.divider::before, .divider::after {
+  content: ''; position: absolute; top: 50%;
+  width: 42%; height: 1px; background: var(--edge);
+}
+.divider::before { left: 0; }
+.divider::after  { right: 0; }
+.divider span {
+  background: var(--ground); padding: 0 12px;
+  font-size: 11px; color: var(--ink-3); font-family: var(--mono);
+  position: relative; z-index: 1;
+}
+
+/* Google button */
+.btn-google {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 11px; background: var(--lift-1);
+  border: 1px solid var(--edge-2); border-radius: var(--r3);
+  color: var(--ink-0); font-family: var(--font);
+  font-size: 14px; font-weight: 500; text-decoration: none; cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+.btn-google:hover { background: var(--lift-2); border-color: var(--hi-edge); }
+
+/* Footer */
+.auth-footer {
+  text-align: center; margin-top: 22px;
+  font-size: 11px; color: var(--ink-3); line-height: 1.6; font-family: var(--mono);
+}
+
+@media (max-width: 768px) {
+  .brand-panel { display: none; }
+  .auth-panel { width: 100%; padding: 32px 20px; }
+}

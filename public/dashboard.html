@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Conferencing System — Dashboard</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="logo-hex">⬡</div>
+    <span class="logo-name">Video Conferencing System</span>
+  </div>
+
+  <nav class="topbar-nav">
+    <a class="nav-link active" href="/dashboard">Dashboard</a>
+    <a class="nav-link" href="/call">Meeting</a>
+  </nav>
+
+  <div class="topbar-right">
+    <div class="user-chip">
+      <div class="user-avatar" id="user-avatar">?</div>
+      <span class="user-name" id="user-name">Loading...</span>
+    </div>
+
+    <a class="btn-logout" href="/logout">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+        <polyline points="16 17 21 12 16 7"/>
+        <line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+      Logout
+    </a>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1 class="hero-title">
+        Welcome, <span id="hero-name">...</span>
+      </h1>
+
+      <p class="hero-sub">
+        Create a meeting or join using Room ID.
+      </p>
+    </div>
+
+    <div class="hero-actions">
+      <button class="btn-new-meeting" onclick="createMeeting()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Create Meeting
+      </button>
+
+      <div class="join-row">
+        <input class="join-input" type="text" id="join-id-input"
+               placeholder="Enter Room ID"
+               maxlength="8"
+               style="text-transform:uppercase"
+               onkeydown="if(event.key==='Enter') joinMeeting()">
+
+        <button class="btn-join" onclick="joinMeeting()">Join</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats-row">
+    <div class="stat-card">
+      <div class="stat-value" id="stat-total">—</div>
+      <div class="stat-label">Meetings</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-value" id="stat-hosted">—</div>
+      <div class="stat-label">Hosted</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-value" id="stat-time">—</div>
+      <div class="stat-label">Duration</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-value" id="stat-people">—</div>
+      <div class="stat-label">Participants</div>
+    </div>
+  </section>
+
+  <!-- Meeting history -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Meeting History</h2>
+      <span class="section-count" id="meetings-count">Loading...</span>
+    </div>
+
+    <div class="loading-state" id="loading-meetings">
+      <div class="spinner"></div>
+      <span>Loading...</span>
+    </div>
+
+    <div class="empty-state" id="empty-meetings" style="display:none">
+      <div class="empty-icon">⬡</div>
+      <div class="empty-title">No meetings available</div>
+      <div class="empty-sub">You can create a meeting from above.</div>
+    </div>
+
+    <div class="table-wrap" id="meetings-table" style="display:none">
+      <table class="meetings-table">
+        <thead>
+          <tr>
+            <th>Room ID</th>
+            <th>Title</th>
+            <th>Role</th>
+            <th>Date</th>
+            <th>Duration</th>
+            <th>Participants</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="meetings-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Profile -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Profile</h2>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-avatar" id="profile-avatar">?</div>
+
+      <div class="profile-info">
+        <div class="profile-name" id="profile-name">Loading...</div>
+        <div class="profile-email" id="profile-email">...</div>
+        <div class="profile-joined">
+          Joined on <span id="profile-joined">...</span>
+        </div>
+      </div>
+
+      <div class="profile-edit">
+        <input class="field-input" type="text" id="edit-name" placeholder="Update name">
+        <button class="btn-save" onclick="saveName()">Save</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<!-- Create meeting modal -->
+<div class="modal-overlay" id="meeting-modal" style="display:none"
+     onclick="if(event.target===this)closeMeetingModal()">
+
+  <div class="modal">
+    <h3 class="modal-title">Create Meeting</h3>
+
+    <p class="modal-sub">
+      Enter meeting title (optional).
+    </p>
+
+    <div class="field-group-sm">
+      <label class="field-label-sm">Title</label>
+      <input class="field-input" type="text" id="meeting-title"
+             placeholder="Meeting name"
+             maxlength="80"
+             onkeydown="if(event.key==='Enter') confirmCreateMeeting()">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-primary-sm" onclick="confirmCreateMeeting()">Start</button>
+      <button class="btn-ghost-sm" onclick="closeMeetingModal()">Cancel</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS — Call</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<script src="/js/prefill.js"></script>
+<body>
+
+<!-- LANDING -->
+<div id="landing">
+  <div class="landing-card">
+    <div class="brand">
+      <div class="brand-icon">⬡</div>
+      <div>
+        <h1>NEXUS</h1>
+        <span>P2P Video Conferencing</span>
+      </div>
+    </div>
+
+    <div class="landing-title">Connect <em>instantly.</em><br>No downloads.</div>
+    <div class="landing-sub">// WebRTC · end-to-end encrypted · no account needed</div>
+
+    <div class="field-group">
+      <div class="field-label">Your display name</div>
+      <input type="text" id="display-name" placeholder="Enter your name..." maxlength="30" autocomplete="name">
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="App.createRoom()">⬡ Create Room</button>
+    </div>
+
+    <div class="divider">or join existing</div>
+
+    <div class="field-group">
+      <div class="field-label">Meeting ID</div>
+      <input type="text" id="join-room-id" placeholder="e.g. ABCD1234" autocomplete="off" style="text-transform:uppercase;font-family:'JetBrains Mono',monospace;letter-spacing:2px">
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="App.joinRoom()">Join Meeting</button>
+    </div>
+
+    <div class="landing-footer">
+      <div class="conn-indicator" id="server-status">
+        <div class="dot dot-yellow"></div>
+        <span>Connecting to server...</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CALL SCREEN -->
+<div id="call-screen">
+  <div class="topbar">
+    <div class="topbar-brand">NEXUS</div>
+    <div class="meeting-id-chip" onclick="UI.showShareModal()" title="Click to copy & share">
+      <span id="topbar-room-id">—</span>
+      <span class="chip-copy">⧉</span>
+    </div>
+    <div class="status-dot" id="status-dot"></div>
+    <div class="status-text" id="conn-status">Connecting...</div>
+    <div class="timer" id="call-timer">00:00</div>
+    <div class="participant-count" id="part-count">1 person</div>
+  </div>
+
+  <div class="video-area">
+    <div class="videos-grid" id="videos-grid">
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon">⬡</div>
+        <div class="empty-text">Waiting for others to join</div>
+        <div class="empty-sub">Share your Room ID to invite people</div>
+        <button class="btn btn-secondary" style="margin-top:20px;width:auto;padding:10px 22px" onclick="UI.showShareModal()">Share Room ID</button>
+      </div>
+    </div>
+
+    <div id="local-pip">
+      <video id="local-video" autoplay muted playsinline></video>
+      <div class="pip-label" id="pip-label">You</div>
+      <div class="pip-overlay" id="pip-overlay">
+        <div class="pip-avatar" id="pip-avatar">?</div>
+      </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-tabs">
+          <button class="stab active" id="stab-chat"   onclick="UI.switchTab('chat')">Chat</button>
+          <button class="stab"        id="stab-people" onclick="UI.switchTab('people')">People</button>
+        </div>
+        <button class="sidebar-close" onclick="UI.closeSidebar()">✕</button>
+      </div>
+      <div id="sidebar-content" style="flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="controls-left">
+      <span id="room-label-ctrl" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-3)"></span>
+    </div>
+    <div class="ctrl-wrap">
+      <button class="ctrl-btn" id="btn-mic"    onclick="Media.toggleMic()"    title="Microphone">🎙</button>
+      <span class="ctrl-label">Mic</span>
+    </div>
+    <div class="ctrl-wrap">
+      <button class="ctrl-btn" id="btn-cam"    onclick="Media.toggleCam()"    title="Camera">📷</button>
+      <span class="ctrl-label">Camera</span>
+    </div>
+    <div class="ctrl-wrap">
+      <button class="ctrl-btn" id="btn-screen" onclick="Media.toggleScreen()" title="Screen share">🖥</button>
+      <span class="ctrl-label">Screen</span>
+    </div>
+    <div class="ctrl-wrap">
+      <button class="ctrl-btn" id="btn-chat"   onclick="UI.openSidebar('chat')"   title="Chat">💬</button>
+      <span class="ctrl-label">Chat</span>
+    </div>
+    <div class="ctrl-wrap">
+      <button class="ctrl-btn" id="btn-people" onclick="UI.openSidebar('people')" title="People">👥</button>
+      <span class="ctrl-label">People</span>
+    </div>
+    <div class="ctrl-wrap">
+      <button class="ctrl-btn" id="btn-share"  onclick="UI.showShareModal()"      title="Invite">🔗</button>
+      <span class="ctrl-label">Invite</span>
+    </div>
+    <div class="ctrl-wrap">
+      <button class="ctrl-btn ctrl-danger" onclick="App.leaveCall()" title="Leave">📵</button>
+      <span class="ctrl-label">Leave</span>
+    </div>
+  </div>
+</div>
+
+<!-- SHARE MODAL -->
+<div class="modal-overlay" id="share-modal">
+  <div class="modal">
+    <div class="modal-bar"></div>
+    <h2>Invite Participants</h2>
+    <p>Share this Room ID — anyone with it can join instantly.</p>
+    <div class="field-label" style="margin-bottom:8px">Room ID</div>
+    <div class="share-id-box" id="share-room-id-box" onclick="UI.copyRoomId()">
+      <span id="share-id-text">—</span>
+      <span class="copy-hint">click to copy</span>
+    </div>
+    <div class="share-url-box" id="share-url-box"></div>
+    <div class="modal-btn-row">
+      <button class="btn btn-primary"   onclick="UI.copyRoomId()">Copy Room ID</button>
+      <button class="btn btn-secondary" onclick="UI.copyLink()">Copy Link</button>
+      <button class="btn btn-ghost"     onclick="UI.closeModal('share-modal')">✕</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/webrtc.js"></script>
+<script src="/js/ui.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/prefill.js"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS — Sign In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Left: Branding -->
+  <div class="brand-panel">
+    <div class="brand-content">
+      <div class="brand-logo">
+        <div class="logo-hex">⬡</div>
+        <span class="logo-name">NEXUS</span>
+      </div>
+      <h1 class="brand-headline">Video calls,<br><em>your way.</em></h1>
+      <p class="brand-sub">No downloads. No installs.<br>Share a Room ID and connect instantly.</p>
+      <div class="feature-list">
+        <div class="feature-item"><span class="feature-dot"></span>End-to-end encrypted via WebRTC</div>
+        <div class="feature-item"><span class="feature-dot"></span>Screen sharing and live chat</div>
+        <div class="feature-item"><span class="feature-dot"></span>Full meeting history on your dashboard</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Auth form -->
+  <div class="auth-panel">
+    <div class="auth-card">
+
+      <div class="auth-tabs">
+        <button class="tab active" id="tab-login"  onclick="showTab('login')">Sign In</button>
+        <button class="tab"        id="tab-signup" onclick="showTab('signup')">Create Account</button>
+      </div>
+
+      <div class="banner" id="banner" style="display:none"></div>
+
+      <!-- Login -->
+      <form id="form-login" onsubmit="handleLogin(event)">
+        <div class="field-group">
+          <label class="field-label">Email address</label>
+          <input class="field-input" type="email" id="login-email"
+                 placeholder="you@example.com" autocomplete="email" required>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Password</label>
+          <input class="field-input" type="password" id="login-password"
+                 placeholder="Your password" autocomplete="current-password" required>
+        </div>
+        <button class="btn-primary" type="submit" id="btn-login">
+          <span class="btn-text">Sign In</span>
+          <span class="btn-spinner" style="display:none">⟳</span>
+        </button>
+      </form>
+
+      <!-- Signup -->
+      <form id="form-signup" style="display:none" onsubmit="handleSignup(event)">
+        <div class="field-group">
+          <label class="field-label">Display name</label>
+          <input class="field-input" type="text" id="signup-name"
+                 placeholder="e.g. Vishal Kumar" maxlength="50" autocomplete="name" required>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Email address</label>
+          <input class="field-input" type="email" id="signup-email"
+                 placeholder="you@example.com" autocomplete="email" required>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Password <span class="field-hint">(min 6 characters)</span></label>
+          <input class="field-input" type="password" id="signup-password"
+                 placeholder="Create a password" autocomplete="new-password" required minlength="6">
+        </div>
+        <button class="btn-primary" type="submit" id="btn-signup">
+          <span class="btn-text">Create Account</span>
+          <span class="btn-spinner" style="display:none">⟳</span>
+        </button>
+      </form>
+
+     
+      
+
+
+    </div>
+  </div>
+
+</div>
+
+<script src="/js/auth.js"></script>
+</body>
+</html>
